@@ -27,16 +27,16 @@ const CaptainLogin = () => {
             submitHandler(e);
           }}
         >
-          <h3 className="text-lg font-medium mb-2">What&apos;s your email</h3>
+          <h3 className="text-lg font-medium mb-2">What&apos;s your captain email ?</h3>
           <input
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="bg-[#eeeeee] mb-7 rounded px-4 py-2 border w-full text-lg placeholder:text-base"
             type="email"
-            placeholder="email@example.com"
+            placeholder="email@captain.com"
           />
-          <h3 className="text-lg font-medium mb-2">Enter your Password</h3>
+          <h3 className="text-lg font-medium mb-2">Enter your captain Password</h3>
           <input
             required
             value={password}
@@ -59,7 +59,7 @@ const CaptainLogin = () => {
       </div>
       <div>
         <Link
-          to="/captain-login"
+          to="/login"
           className="bg-[#d5622d] flex items-center justify-center mb-5 text-white rounded px-4 py-2 w-full text-lg placeholder:text-base"
         >
           Sign in as User
