@@ -5,6 +5,8 @@ import "remixicon/fonts/remixicon.css";
 import LocationSearchPanel from "../components/LocationSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
+import LookingForDriver from "../components/LookingForDriver";
+import WaitingForDriver from "../components/WaitingForDriver";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -19,6 +21,12 @@ const Home = () => {
 
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const confirmRidePanelRef = useRef(null);
+
+  const [vehicleFound, setVehicleFound] = useState(false);
+  const vehicleFoundRef = useRef(null);
+
+  const [waitingForDriver, setWaitingForDriver] = useState(false);
+  const waitingForDriverRef = useRef(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -70,6 +78,38 @@ const Home = () => {
       }
     },
     [confirmRidePanel]
+  );
+
+  // Looking for a Ride
+  useGSAP(
+    function () {
+      if (vehicleFound) {
+        gsap.to(vehicleFoundRef.current, {
+          transform: "translateY(0)",
+        });
+      } else {
+        gsap.to(vehicleFoundRef.current, {
+          transform: "translateY(100%)",
+        });
+      }
+    },
+    [vehicleFound]
+  );
+
+  // Waiting for a Ride
+  useGSAP(
+    function () {
+      if (waitingForDriver) {
+        gsap.to(waitingForDriverRef.current, {
+          transform: "translateY(0)",
+        });
+      } else {
+        gsap.to(waitingForDriverRef.current, {
+          transform: "translateY(100%)",
+        });
+      }
+    },
+    [waitingForDriver]
   );
 
   return (
@@ -149,7 +189,7 @@ const Home = () => {
       >
         <VehiclePanel
           setConfirmRidePanel={setConfirmRidePanel}
-          setVehiclePanelOpen={setVehiclePanel}
+          setVehiclePanel={setVehiclePanel}
         />
       </div>
 
@@ -160,15 +200,24 @@ const Home = () => {
       >
         <ConfirmRide
           setConfirmRidePanel={setConfirmRidePanel}
-          setVehiclePanel={setVehiclePanel}
+          setVehicleFound={setVehicleFound}
         />
       </div>
 
+      {/* Looking For Ride */}
       <div
-        
+        ref={vehicleFoundRef}
         className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-14"
       >
-        
+        <LookingForDriver setVehicleFound={setVehicleFound} />
+      </div>
+
+      {/* Waiting For Ride */}
+      <div
+        ref={waitingForDriverRef}
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-14"
+      >
+        <WaitingForDriver setWaitingForDriver={setWaitingForDriver} />
       </div>
     </div>
   );
