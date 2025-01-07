@@ -2,16 +2,16 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const captainShema = new mongoose.Schema({
+const captainSchema = new mongoose.Schema({
   fullname: {
     firstname: {
       type: String,
       required: true,
-      minlength: [3, "Firstname must be 3 characters long"],
+      minlength: [3, "Firstname must be at least 3 characters long"],
     },
     lastname: {
       type: String,
-      minlength: [3, "Lastname must be 3 characters long"],
+      minlength: [3, "Lastname must be at least 3 characters long"],
     },
   },
   email: {
@@ -19,7 +19,7 @@ const captainShema = new mongoose.Schema({
     required: true,
     unique: true,
     lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
+    match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
   },
   password: {
     type: String,
@@ -29,6 +29,7 @@ const captainShema = new mongoose.Schema({
   socketId: {
     type: String,
   },
+
   status: {
     type: String,
     enum: ["active", "inactive"],
@@ -39,12 +40,12 @@ const captainShema = new mongoose.Schema({
     color: {
       type: String,
       required: true,
-      minlength: [3, "Color must be 3 characters long"],
+      minlength: [3, "Color must be at least 3 characters long"],
     },
     plate: {
       type: String,
       required: true,
-      minlength: [3, "Plate must be 3 characters long"],
+      minlength: [3, "Plate must be at least 3 characters long"],
     },
     capacity: {
       type: Number,
@@ -57,8 +58,9 @@ const captainShema = new mongoose.Schema({
       enum: ["car", "motorcycle", "auto"],
     },
   },
+
   location: {
-    lat: {
+    ltd: {
       type: Number,
     },
     lng: {
@@ -67,21 +69,21 @@ const captainShema = new mongoose.Schema({
   },
 });
 
-captainShema.methods.generateAuthToken = function () {
+captainSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
   return token;
 };
 
-captainShema.methods.comparePassword = async function (password) {
+captainSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-captainShema.statics.hashPassword = async function (password) {
+captainSchema.statics.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 };
 
-const captainModel = mongoose.model("captain", captainShema);
+const captainModel = mongoose.model("captain", captainSchema);
 
 module.exports = captainModel;
